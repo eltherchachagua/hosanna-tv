@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HOSANNA TV - En Vivo</title>
+    <title>HOSANNA TV & RADIO - En Vivo</title>
     
     <!-- Video.js CSS oficial -->
     <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
@@ -89,7 +89,7 @@
             50% { transform: scale(1.2); opacity: 1; }
         }
 
-        /* Tarjetas Contenedoras Unificadas */
+        /* Tarjetas Contenedoras */
         .card-box {
             background-color: var(--card-color);
             padding: 25px;
@@ -105,7 +105,7 @@
         }
 
         .card-box h2 {
-            margin: 0 0 10px;
+            margin: 0 0 8px;
             font-size: 1.5rem;
         }
 
@@ -115,7 +115,7 @@
             margin: 0 0 20px;
         }
 
-        /* Reproductor de Video */
+        /* 1. Reproductor de Video TV */
         .video-js {
             width: 100%;
             border-radius: 8px;
@@ -133,24 +133,127 @@
             margin-left: -35px;
         }
 
-        /* Contenedor del Reproductor de Radio Oficial */
-        .radio-iframe-box {
+        /* 2. BARRA DE RADIO CON BOTÓN PLAY/PAUSE MANUAL */
+        .radio-bar-container {
             width: 100%;
-            max-width: 420px;
+            max-width: 480px;
+            height: 84px;
             margin: 0 auto;
-            border-radius: 12px;
+            border-radius: 50px;
             overflow: hidden;
-            background: #111;
+            position: relative;
+            background: #121218;
+            border: 1px solid #2e2e3e;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 22px;
+            box-sizing: border-box;
+            gap: 15px;
         }
 
-        .radio-iframe-box iframe {
-            width: 100%;
-            height: 160px;
+        .radio-bar-container iframe {
+            width: 852px;
+            height: 480px;
+            position: absolute;
+            top: -195px;
+            left: 50%;
+            transform: translateX(-50%);
             border: none;
-            display: block;
+            opacity: 0.25;
+            pointer-events: none;
+            z-index: 1;
         }
 
-        /* Botón de Descarga */
+        .radio-controls-overlay {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            gap: 15px;
+        }
+
+        .custom-play-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.15rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.15s ease, background 0.2s ease;
+            box-shadow: 0 4px 12px rgba(229, 9, 20, 0.5);
+        }
+
+        .custom-play-btn:hover {
+            transform: scale(1.06);
+            background-color: #ff1e27;
+        }
+
+        .radio-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            flex-grow: 1;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .radio-title {
+            font-weight: bold;
+            font-size: 1rem;
+            color: #fff;
+            white-space: nowrap;
+        }
+
+        .radio-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Barras de ecualizador animadas */
+        .equalizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 24px;
+            padding: 0 6px;
+        }
+
+        .bar {
+            width: 4px;
+            height: 6px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+            transition: height 0.2s ease;
+        }
+
+        .equalizer.playing .bar {
+            animation: bounce 1s infinite ease-in-out alternate;
+        }
+
+        .equalizer.playing .bar:nth-child(1) { animation-duration: 0.7s; }
+        .equalizer.playing .bar:nth-child(2) { animation-duration: 0.5s; }
+        .equalizer.playing .bar:nth-child(3) { animation-duration: 0.8s; }
+        .equalizer.playing .bar:nth-child(4) { animation-duration: 0.6s; }
+        .equalizer.playing .bar:nth-child(5) { animation-duration: 0.9s; }
+        .equalizer.playing .bar:nth-child(6) { animation-duration: 0.55s; }
+        .equalizer.playing .bar:nth-child(7) { animation-duration: 0.75s; }
+
+        @keyframes bounce {
+            0% { height: 4px; opacity: 0.4; }
+            100% { height: 24px; opacity: 1; }
+        }
+
+        /* 3. Botón de Descarga */
         .btn-download {
             display: inline-block;
             background-color: #0070f3;
@@ -183,7 +286,7 @@
         <!-- Cabecera y Logo -->
         <div class="header-container">
             <h1>HOSANNA TV</h1>
-            <img src="animado.gif" alt="HOSANNA TV Logo">
+            <img src="animado.gif" alt="HOSANNA TV Logo" onerror="this.style.display='none'">
         </div>
         <div class="status-badge">En Directo</div>
         
@@ -204,15 +307,37 @@
 
         <!-- 2. REPRODUCTOR DE RADIO ONLINE -->
         <div class="card-box">
-            <h2>Radio Online</h2>
-            <p>Escucha nuestra señal de audio en directo las 24 horas.</p>
-            
-            <div class="radio-iframe-box">
+            <h2>Hosanna Radio</h2>
+            <p>Señal de audio en vivo las 24 horas</p>
+
+            <div class="radio-bar-container">
                 <iframe 
-                    src="https://cloud.caster.fm/player/a33b6fa6-ed7f-4779-aa35-dd35c015ee1c" 
-                    allow="autoplay" 
-                    title="Radio Online Hosanna">
+                    id="sshRadioIframe"
+                    src="" 
+                    scrolling="no" 
+                    allow="autoplay; fullscreen">
                 </iframe>
+
+                <div class="radio-controls-overlay">
+                    <button id="radioToggleBtn" class="custom-play-btn" title="Reproducir / Pausar">
+                        ▶
+                    </button>
+
+                    <div class="radio-info">
+                        <span class="radio-title">Señal Oficial en Vivo</span>
+                        <span class="radio-subtitle" id="radioStatusText">Presiona Play para escuchar</span>
+                    </div>
+
+                    <div class="equalizer" id="radioEqualizer">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -232,7 +357,35 @@
 
     </div>
 
-    <!-- Script de Video.js -->
+    <!-- Script de Video.js para la TV -->
     <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+
+    <!-- Controlador Play / Pausa manual -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleBtn = document.getElementById('radioToggleBtn');
+            const statusText = document.getElementById('radioStatusText');
+            const sshIframe = document.getElementById('sshRadioIframe');
+            const equalizer = document.getElementById('radioEqualizer');
+            const streamUrl = "https://ssh101.com/securelive/index.php?id=htv47";
+            let isPlaying = false;
+
+            toggleBtn.addEventListener('click', function() {
+                if (!isPlaying) {
+                    sshIframe.src = streamUrl;
+                    isPlaying = true;
+                    toggleBtn.innerHTML = "❚❚";
+                    statusText.textContent = "Transmitiendo en vivo";
+                    equalizer.classList.add('playing');
+                } else {
+                    sshIframe.src = "";
+                    isPlaying = false;
+                    toggleBtn.innerHTML = "▶";
+                    statusText.textContent = "En pausa";
+                    equalizer.classList.remove('playing');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
